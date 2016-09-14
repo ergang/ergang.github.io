@@ -54,7 +54,7 @@ table {
       padding-top:50px;
       margin:auto;
       text-align: center;
-      line-height: 1;
+      
       font-family: Avenir,"Helvetica Neue",Helvetica,Arial,sans-serif
     }
     a {
@@ -66,6 +66,29 @@ table {
       box-shadow: 2px 2px 2px 2px #ccc;
       
     }
+    
+    #knownIssue {
+      margin:30px 40px;
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      background-color: #FFFACD;
+      text-align: left;
+    }
+    
+    h1 {
+      font-size: 20px;
+      font-weight: bold;
+      padding-bottom: 10px;
+    }
+    
+    ul {
+      list-style: disc;
+      padding-left:20px;
+    }
+    
+    strong {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -73,7 +96,18 @@ table {
     <a href="itms-services:///?action=download-manifest&url=https://intuitcorp.quickbase.com/up/bk6r3xjv9/a/r1/e14/v0">Download Card Me</a>  
   </div>
   <div style="width:90%">
-    Once you tap this button, the app will start downloading in the background
+    The app will start downloading in the background after the installation prompt.
+  </div>
+  
+  <div id="knownIssue">
+    <h1>
+      Known Issues
+    </h1>
+    <ul>
+      <li>
+        There is a known issue that may cause the app to crash on <strong>iOS 10</strong> due to instability of a third-party library used in this application. 
+      </li>
+    </ul>
   </div>
 </body>
 </html>
