@@ -5,9 +5,17 @@
   <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
+  <strong>
+    Low Setting
+  </strong>
   <p>
-    Medium Setting
+    <strong>User Agent String (JavaScript Enabled):</strong>
+    <br  />
+    <span id="ua"></span>
   </p>
   <div class="g-recaptcha" data-sitekey="6Lf7DykTAAAAAC-suhzWzvcoevHy6E4IRFkKXCbC"></div>
+  <script>
+    document.getElementById("ua").innerHTML = navigator.userAgent;
+  </script>
 </body>
 </html>

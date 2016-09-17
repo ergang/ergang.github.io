@@ -5,9 +5,18 @@
   <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
-  <p>
+  <strong>
     Low Setting
+  </strong>
+  <p>
+    <strong>User Agent String (JavaScript Enabled):</strong>
+    <br  />
+    <span id="ua"></span>
   </p>
+  
   <div class="g-recaptcha" data-sitekey="6Lci9wYUAAAAAOv66Gl-7H9kJRk1r9m-mPWoY4dk"></div>
+  <script>
+    document.getElementById("ua").innerHTML = navigator.userAgent;
+  </script>
 </body>
 </html>
