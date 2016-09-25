@@ -13,10 +13,14 @@
     <br  />
     <span id="ua"></span>
   </p>
-  
+  <p>
+    <strong>document.documentMode: </strong>
+    <span id="docMode"></span>
+  </p>
   <div class="g-recaptcha" data-sitekey="6Lci9wYUAAAAAOv66Gl-7H9kJRk1r9m-mPWoY4dk"></div>
   <script>
     document.getElementById("ua").innerHTML = navigator.userAgent;
+    document.getElementById("docMode").innerHTML = document.documentMode;
   </script>
 </body>
 </html>
