@@ -1,0 +1,25 @@
+<html>
+<head>
+  <title>Acid3</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+</head>
+<body>
+  <strong>
+    Low Setting
+  </strong>
+  <p>
+    <strong>User Agent String (JavaScript Enabled):</strong>
+    <br  />
+    <span id="ua"></span>
+  </p>
+  <p>
+    <strong>document.documentMode: </strong>
+    <span id="docMode"></span>
+  </p>
+  <script>
+    document.getElementById("ua").innerHTML = navigator.userAgent;
+    document.getElementById("docMode").innerHTML = document.documentMode;
+  </script>
+  <iframe src="http://acid3.acidtests.org/" ></iframe>
+</body>
+</html>
