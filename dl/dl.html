@@ -73,7 +73,7 @@
       <option value="invert">Invert</option>
       <option value="sepia">Sepia</option>
     </select>
-    
+
     <canvas id="snapshot"></canvas>
 
     <button id="snapshot">Take a photo</button>
@@ -117,6 +117,23 @@
 
     navigator.mediaDevices.getUserMedia(constraints).
       then(handleSuccess).catch(handleError);
+
+
+    navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
+
+    function gotDevices(deviceInfos) {
+   
+      var media = [];
+      for (var i = 0; i !== deviceInfos.length; ++i) {
+        var deviceInfo = deviceInfos[i];
+        
+        if (deviceInfo.kind === 'videoinput') {
+          media.push[deviceInfo.label];
+        }
+      }
+
+      alert(JSON.stringify(media));
+    }
   </script>
 </body>
 
