@@ -137,9 +137,13 @@
         cameraId = cameras[1].deviceId;
       } 
 
-      constraints.video = { 
-        deviceId: cameraId ? { exact: cameraId } : undefined
-      };
+      // constraints.video = { 
+      //   deviceId: cameraId ? { exact: cameraId } : undefined
+      // };
+
+      constraints.video = {
+        facingMode: { exact : "environment" }
+      }
 
       return navigator.mediaDevices.getUserMedia(constraints);
     }
