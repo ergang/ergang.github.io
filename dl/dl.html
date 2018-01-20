@@ -118,14 +118,7 @@
       console.log('navigator.getUserMedia error: ', error);
     }
 
-
-
-
-    navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
-
     function gotDevices(deviceInfos) {
-
-
       for (var i = 0; i < deviceInfos.length; i++) {
         var deviceInfo = deviceInfos[i];
 
@@ -145,13 +138,14 @@
       }
 
       constraints.video = { 
-        deviceId: camerId ? { exact: cameraId } : undefined
+        deviceId: cameraId ? { exact: cameraId } : undefined
       };
 
-      navigator.mediaDevices.getUserMedia(constraints).
-        then(handleSuccess).catch(handleError);
-
+      return navigator.mediaDevices.getUserMedia(constraints);
     }
+
+    navigator.mediaDevices.enumerateDevices().then(gotDevices).then(handleSuccess).catch(handleError);
+
   </script>
 </body>
 
