@@ -131,11 +131,11 @@
 
       var cameraId = null;
 
-      if(cameras.length > 1 ) {
-        cameraId = cameras[1].deviceId;
-      } else if (cameras.length > 0) {
+      if (cameras.length > 0) {
         cameraId = cameras[0].deviceId;
-      }
+      } else if(cameras.length > 1 ) {
+        cameraId = cameras[1].deviceId;
+      } 
 
       constraints.video = { 
         deviceId: cameraId ? { exact: cameraId } : undefined
