@@ -106,6 +106,8 @@
       video: true
     };
 
+    var cameras = [];
+
     function handleSuccess(stream) {
       window.stream = stream; // make stream available to browser console
       video.srcObject = stream;
@@ -123,7 +125,7 @@
 
     function gotDevices(deviceInfos) {
    
-      var media = [];
+      
       for (var i = 0; i < deviceInfos.length; i++) {
         var deviceInfo = deviceInfos[i];
         
@@ -131,9 +133,11 @@
 
         if (deviceInfo.kind === 'videoinput') {
           console.log(deviceInfo.label);
-          media.push[deviceInfo.label];
+          cameras.push[{deviceId: deviceInfo.deviceId, label: deviceInfo.label}];
         }
       }
+
+      alert(JSON.stringify(cameras));
     }
   </script>
 </body>
