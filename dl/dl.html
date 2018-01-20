@@ -44,6 +44,7 @@
 
     video {
       object-fit: cover;
+      width: 100%;
     }
   </style>
 
@@ -117,27 +118,39 @@
       console.log('navigator.getUserMedia error: ', error);
     }
 
-    navigator.mediaDevices.getUserMedia(constraints).
-      then(handleSuccess).catch(handleError);
+
 
 
     navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
 
     function gotDevices(deviceInfos) {
-   
-      
+
+
       for (var i = 0; i < deviceInfos.length; i++) {
         var deviceInfo = deviceInfos[i];
-        
+
         console.log(deviceInfo);
 
         if (deviceInfo.kind === 'videoinput') {
-          console.log(deviceInfo.label);
           cameras.push(deviceInfo);
         }
       }
 
-      alert(JSON.stringify(cameras));
+      var cameraId = null;
+
+      if(cameras.length > 1 ) {
+        cameraId = cameras[1].deviceId;
+      } else if (cameras.length > 0) {
+        cameraId = cameras[0].deviceId;
+      }
+
+      constraints.video = { 
+        deviceId: camerId ? { exact: cameraId } : undefined
+      };
+
+      navigator.mediaDevices.getUserMedia(constraints).
+        then(handleSuccess).catch(handleError);
+
     }
   </script>
 </body>
