@@ -124,15 +124,16 @@
     function gotDevices(deviceInfos) {
    
       var media = [];
-      for (var i = 0; i !== deviceInfos.length; ++i) {
+      for (var i = 0; i < deviceInfos.length; i++) {
         var deviceInfo = deviceInfos[i];
         
+        console.log(deviceInfo);
+
         if (deviceInfo.kind === 'videoinput') {
+          console.log(deviceInfo.label);
           media.push[deviceInfo.label];
         }
       }
-
-      alert(deviceInfos.length + "\n" + JSON.stringify(media));
     }
   </script>
 </body>
