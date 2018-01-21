@@ -200,7 +200,7 @@
       <label for="file-upload" class="takePhoto" id='fileUpload'>
         <span style="display:inline-block; margin-top:7px;">Take a photo</span>
       </label>
-      <input id="file-upload" style="display:none" type="file" accept="image/*;capture=camera" value="Take a photo" />
+      <input id="file-upload" style="display:none" type="file" accept="image/*;capture=camera"/>
     </div>
   </div>
 
@@ -278,6 +278,7 @@
     }
 
     function handleError(error) {
+      console.log(error);
       fileUploadMode();
     }
 
@@ -304,8 +305,8 @@
 
       constraints.video = {
         facingMode: "environment",
-        width: { ideal: 640 },
-        height: { ideal: 360 }
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
       }
 
       return navigator.mediaDevices.getUserMedia(constraints);
