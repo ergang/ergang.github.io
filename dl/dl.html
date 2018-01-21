@@ -184,7 +184,7 @@
           <h1 id="overlayInstructions" style="display:none">Make sure it's focused ...</h1>
         </div>
 
-        <video autoplay="true" playsinline="true">Your browser does not support streaming this content.</video>
+        <video autoplay playsinline>Your browser does not support streaming this content.</video>
 
       </div>
 
@@ -233,6 +233,7 @@
     var cameras = [];
 
     function handleSuccess(stream) {
+      alert(stream);
       window.stream = stream; // make stream available to browser console
       video.srcObject = stream;
     }
