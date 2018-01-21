@@ -312,12 +312,16 @@
       return navigator.mediaDevices.getUserMedia(constraints);
     }
 
-    alert(navigator.mediaDevices);
+    if(navigator && navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
 
-    navigator.mediaDevices.enumerateDevices()
+      navigator.mediaDevices.enumerateDevices()
       .then(gotDevices)
       .then(handleSuccess)
       .catch(handleError);
+    } else {
+      fileUploadMode();
+    }
+
 
   </script>
 </body>
