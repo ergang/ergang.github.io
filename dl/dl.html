@@ -233,7 +233,6 @@
     var cameras = [];
 
     function handleSuccess(stream) {
-      alert(stream);
       window.stream = stream; // make stream available to browser console
       video.srcObject = stream;
     }
@@ -284,6 +283,7 @@
     }
 
     function gotDevices(deviceInfos) {
+      alert(deviceInfo);
       for (var i = 0; i < deviceInfos.length; i++) {
         var deviceInfo = deviceInfos[i];
 
