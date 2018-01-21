@@ -283,7 +283,6 @@
     }
 
     function gotDevices(deviceInfos) {
-      alert(deviceInfo);
       for (var i = 0; i < deviceInfos.length; i++) {
         var deviceInfo = deviceInfos[i];
 
@@ -312,6 +311,8 @@
 
       return navigator.mediaDevices.getUserMedia(constraints);
     }
+
+    alert(navigator.mediaDevices);
 
     navigator.mediaDevices.enumerateDevices()
       .then(gotDevices)
