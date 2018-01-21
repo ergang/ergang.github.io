@@ -46,6 +46,23 @@
       object-fit: cover;
       width: 100%;
     }
+
+    canvas#snapshot {
+      display: none;
+    }
+
+    .takePhoto {
+      width: 100%;
+      background: #0077C5;
+      border: #0077C5;
+      border-radius: 4px;
+      height: 44px;
+      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .75);
+      padding: 6px 12px;
+      cursor: pointer;
+      font-weight: 400;
+      color: #FFF;
+    }
   </style>
 
 </head>
@@ -77,7 +94,8 @@
 
     <canvas id="snapshot"></canvas>
 
-    <button id="snapshot">Take a photo</button>
+    <button class="takePhoto" id="snapshot">Take a photo</button>
+    <input class="takePhoto" type="file" accept="image/*;capture=camera" value="Take a photo" />
   </div>
 
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
@@ -96,6 +114,7 @@
     snapshotButton.onclick = function () {
       canvas.className = filterSelect.value;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas.setAttribute('style', 'display: block');
     };
 
     filterSelect.onchange = function () {
@@ -115,7 +134,7 @@
     }
 
     function handleError(error) {
-      console.log('navigator.getUserMedia error: ', error);
+
     }
 
     function gotDevices(deviceInfos) {
@@ -133,16 +152,16 @@
 
       if (cameras.length > 0) {
         cameraId = cameras[0].deviceId;
-      } else if(cameras.length > 1 ) {
+      } else if (cameras.length > 1) {
         cameraId = cameras[1].deviceId;
-      } 
+      }
 
       // constraints.video = { 
       //   deviceId: cameraId ? { exact: cameraId } : undefined
       // };
 
       constraints.video = {
-        facingMode: { exact : "environment" }
+        facingMode: { exact: "environment" }
       }
 
       return navigator.mediaDevices.getUserMedia(constraints);
