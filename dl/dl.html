@@ -15,7 +15,16 @@
     crossorigin="anonymous">
 
   <style>
-    .none {
+    html * {
+      font-family: "AvenirNext", "Avenir", "Helvetica Neue", "Helvetica";
+      box-sizing: border-box;
+    }
+
+    body {
+      padding: 10px;
+    }
+
+    /* .none {
       -webkit-filter: none;
       filter: none;
     }
@@ -38,7 +47,7 @@
     .sepia {
       -webkit-filter: sepia(1);
       filter: sepia(1);
-    }
+    } */
 
     video {
       object-fit: cover;
@@ -69,14 +78,6 @@
       margin: 10px auto;
     }
 
-    html * {
-      font-family: "AvenirNext", "Avenir", "Helvetica Neue", "Helvetica";
-      box-sizing: border-box;
-    }
-
-    body {
-      padding: 10px;
-    }
 
     .fa-check {
       color: green;
@@ -96,12 +97,13 @@
     }
 
     #video_box {
+      position: relative;
       float: left;
       border-radius: 5px;
       border: 4px solid #ccc;
       border-style: dashed;
       width: 100%;
-      padding: 5px;
+
       margin: 10px auto;
     }
 
@@ -111,6 +113,7 @@
       width: 100%;
       background-color: transparent;
       z-index: 300000;
+      margin: 10px auto;
     }
 
     ul {
@@ -120,7 +123,7 @@
       width: 90%;
       text-align: center;
       margin: auto;
-      padding:10px 0;
+      padding: 10px 0;
     }
 
     li i {
@@ -134,6 +137,22 @@
       padding-left: 10px;
       padding: 10px;
       text-align: left;
+    }
+
+    h1#overlayInstructions {
+      background: #0077C5;
+      border-radius: 30px;
+      color: white;
+      opacity: 0.7;
+      width: 60%;
+      margin: auto;
+    }
+
+    .hidden {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s 2s, opacity 2s ease-in-out;
+      -webkit-transition: visibility 0s 2s, opacity 2s ease-in-out;
     }
   </style>
 
@@ -157,53 +176,53 @@
         <i class="fa fa-check"></i>Dark background</li>
     </ul>
 
-    <div id="video_box">
-      <div style="width:100%" id="video_overlays"></div>
-      <div style="width:100%">
+    <!-- Web RTC -->
+    <div id="webRtcContainer">
+      <div id="video_box">
+        <div id="video_overlays">
+          <h1 id="loadingLabel"> Loading camera ... </h1>
+          <h1 id="overlayInstructions" style="display:none">Make sure it's focused ...</h1>
+        </div>
+
         <video autoplay="true" playsinline="true">Your browser does not support streaming this content.</video>
+
       </div>
+
+      <canvas id="snapshot"></canvas>
+
+      <button class="takePhoto" id="snapshot">Take a photo</button>
     </div>
 
-    <label for="select" style="display:none">Filter: </label>
-    <select id="filter" style="display:none">
-      <option value="none">None</option>
-      <option value="blur">Blur</option>
-      <option value="grayscale">Grayscale</option>
-      <option value="invert">Invert</option>
-      <option value="sepia">Sepia</option>
-    </select>
+    <!-- File upload -->
+    <div id="fileUploadContainer">
+      <img id="dlImage" src="dl.jpg" width='100%' height='100%' style="display:none">
 
-    <canvas id="snapshot"></canvas>
-
-    <button class="takePhoto" id="snapshot">Take a photo</button>
-    <label for="file-upload" class="takePhoto">
-      <span style="display:inline-block; margin-top:7px;">Take a photo two</span>
-    </label>
-    <input id="file-upload" style="display:none" type="file" accept="image/*;capture=camera" value="Take a photo" />
+      <label for="file-upload" class="takePhoto" id='fileUpload' style='display:none'>
+        <span style="display:inline-block; margin-top:7px;">Take a photo two</span>
+      </label>
+      <input id="file-upload" style="display:none" type="file" accept="image/*;capture=camera" value="Take a photo" />
+    </div>
   </div>
 
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
   <script>
     'use strict';
 
     var snapshotButton = document.querySelector('button#snapshot');
-    var filterSelect = document.querySelector('select#filter');
+    var loadingEl = document.querySelector('#loadingLabel');
+    var overlayInstructions = document.querySelector('#overlayInstructions');
 
     // Put variables in global scope to make them available to the browser console.
     var video = window.video = document.querySelector('video');
     var canvas = window.canvas = document.querySelector('canvas');
-    canvas.width = 480;
+    canvas.width = 640;
     canvas.height = 360;
 
     snapshotButton.onclick = function () {
-      canvas.className = filterSelect.value;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       canvas.setAttribute('style', 'display: block');
-      alert('Image Base64 encoded size: ' + canvas.toDataURL().length);
-    };
-
-    filterSelect.onchange = function () {
-      video.className = filterSelect.value;
+      alert('Image size: ' + stringToBytesFaster(canvas.toDataURL()).length / 1000000 + " MB");
     };
 
     var constraints = {
@@ -218,15 +237,53 @@
       video.srcObject = stream;
     }
 
+    video.onloadeddata = () => {
+      loadingEl.style.display = 'none';
+      overlayInstructions.style.display = 'block';
+      setTimeout(() => { overlayInstructions.className = 'hidden'; }, 1000);
+    }
+
+    function fileUploadMode() {
+      var webRtcContainer = document.querySelector('#webRtcContainer');
+      webRtcContainer.style.display = 'none';
+
+      var fileUploadContainer = document.querySelector('#fileUploadContainer');
+      fileUploadContainer.style.display = 'block';
+    }
+
+    function stringToBytesFaster(str) {
+      //http://stackoverflow.com/questions/1240408/reading-bytes-from-a-javascript-string
+      var ch, st, re = [], j = 0;
+      for (var i = 0; i < str.length; i++) {
+        ch = str.charCodeAt(i);
+        if (ch < 127) {
+          re[j++] = ch & 0xFF;
+        }
+        else {
+          st = [];    // clear stack
+          do {
+            st.push(ch & 0xFF);  // push byte to stack
+            ch = ch >> 8;          // shift value down by 1 byte
+          }
+          while (ch);
+          // add stack contents to result
+          // done because chars have "wrong" endianness
+          st = st.reverse();
+          for (var k = 0; k < st.length; ++k)
+            re[j++] = st[k];
+        }
+      }
+      // return an array of bytes
+      return re;
+    }
+
     function handleError(error) {
-      alert(error);
+      fileUploadMode();
     }
 
     function gotDevices(deviceInfos) {
       for (var i = 0; i < deviceInfos.length; i++) {
         var deviceInfo = deviceInfos[i];
-
-        console.log(deviceInfo);
 
         if (deviceInfo.kind === 'videoinput') {
           cameras.push(deviceInfo);
@@ -247,14 +304,17 @@
 
       constraints.video = {
         facingMode: "environment",
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
+        width: { ideal: 640 },
+        height: { ideal: 360 }
       }
 
       return navigator.mediaDevices.getUserMedia(constraints);
     }
 
-    navigator.mediaDevices.enumerateDevices().then(gotDevices).then(handleSuccess).catch(handleError);
+    navigator.mediaDevices.enumerateDevices()
+      .then(gotDevices)
+      .then(handleSuccess)
+      .catch(handleError);
 
   </script>
 </body>
