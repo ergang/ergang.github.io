@@ -9,152 +9,11 @@
 
   <base target="_blank">
 
-  <title>Web RTC POC</title>
+  <title>Verify your government ID</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" />
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
     crossorigin="anonymous">
-
-  <style>
-    html * {
-      font-family: "AvenirNext", "Avenir", "Helvetica Neue", "Helvetica";
-      box-sizing: border-box;
-    }
-
-    body {
-      padding: 10px;
-    }
-
-    /* .none {
-      -webkit-filter: none;
-      filter: none;
-    }
-
-    .blur {
-      -webkit-filter: blur(3px);
-      filter: blur(3px);
-    }
-
-    .grayscale {
-      -webkit-filter: grayscale(1);
-      filter: grayscale(1);
-    }
-
-    .invert {
-      -webkit-filter: invert(1);
-      filter: invert(1);
-    }
-
-    .sepia {
-      -webkit-filter: sepia(1);
-      filter: sepia(1);
-    } */
-
-    video {
-      object-fit: cover;
-      width: 100%;
-    }
-
-    canvas#snapshot {
-      object-fit: cover;
-      display: none;
-      width: 100%;
-      padding: 50px;
-    }
-
-    .takePhoto {
-      width: 100%;
-      background: #0077C5;
-      border: #0077C5;
-      border-radius: 4px;
-      height: 44px;
-      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .75);
-      padding: 6px 12px;
-      cursor: pointer;
-      font-weight: 400;
-      font-size: 18px;
-      text-align: center;
-      color: #FFF;
-      display: inline-block;
-      margin: 10px auto;
-    }
-
-
-    .fa-check {
-      color: green;
-    }
-
-    h1 {
-      font-size: 20px;
-      font-weight: bold;
-      width: 100%;
-      text-align: center;
-      padding: 10px 20px;
-    }
-
-    h2 {
-      width: 100%;
-      text-align: center;
-    }
-
-    #video_box {
-      position: relative;
-      float: left;
-      border-radius: 5px;
-      border: 4px solid #ccc;
-      border-style: dashed;
-      width: 100%;
-
-      margin: 10px auto;
-    }
-
-    #video_overlays {
-      position: absolute;
-      float: left;
-      width: 100%;
-      background-color: transparent;
-      z-index: 300000;
-      margin: 10px auto;
-    }
-
-    ul {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      width: 90%;
-      text-align: center;
-      margin: auto;
-      padding: 10px 0;
-    }
-
-    li i {
-      padding-right: 5px;
-    }
-
-    li {
-      list-style: none;
-      display: inline-block;
-      width: calc(100% / 2);
-      padding-left: 10px;
-      padding: 10px;
-      text-align: left;
-    }
-
-    h1#overlayInstructions {
-      background: #0077C5;
-      border-radius: 30px;
-      color: white;
-      opacity: 0.7;
-      width: 60%;
-      margin: auto;
-    }
-
-    .hidden {
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0s 2s, opacity 2s ease-in-out;
-      -webkit-transition: visibility 0s 2s, opacity 2s ease-in-out;
-    }
-  </style>
+  <link href="dl.css" rel="stylesheet"/>
 
 </head>
 
@@ -240,7 +99,7 @@
     video.onloadeddata = () => {
       loadingEl.style.display = 'none';
       overlayInstructions.style.display = 'block';
-      setTimeout(() => { overlayInstructions.className = 'hidden'; }, 1000);
+      setTimeout(() => { overlayInstructions.className = 'hidden'; }, 500);
     }
 
     function fileUploadMode() {
@@ -278,7 +137,7 @@
     }
 
     function handleError(error) {
-      alert("error: " + error);
+      //alert("error: " + error);
       fileUploadMode();
     }
 
