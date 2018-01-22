@@ -13,13 +13,14 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" />
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
     crossorigin="anonymous">
-  <link href="dl.css" rel="stylesheet"/>
+  <link href="dl.css" rel="stylesheet" />
 
 </head>
 
 <body>
   <div id="container">
 
+    <!-- header -->
     <h1>Take a photo of the front of your ID</h1>
 
     <h2>Be sure your photo has:</h2>
@@ -47,21 +48,22 @@
 
       </div>
 
-      <canvas id="snapshot"></canvas>
-
       <button class="takePhoto" id="snapshot">Take a photo</button>
     </div>
 
     <!-- File upload -->
     <div id="fileUploadContainer" style="display:none">
-      <img id="dlImage" src="dl.jpg" width='100%' height='100%' >
+      <img id="dlImage" src="dl.jpg" width='100%' height='100%'>
 
       <label for="file-upload" class="takePhoto" id='fileUpload'>
         <span style="display:inline-block; margin-top:7px;">Take a photo</span>
       </label>
-      <input id="file-upload" style="display:none" type="file" accept="image/*;capture=camera"/>
+      <input id="file-upload" style="display:none" type="file" accept="image/*;capture=camera" />
     </div>
   </div>
+
+  <!-- Canvas -->
+  <canvas id="snapshot"></canvas>
 
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
@@ -71,25 +73,38 @@
     var snapshotButton = document.querySelector('button#snapshot');
     var loadingEl = document.querySelector('#loadingLabel');
     var overlayInstructions = document.querySelector('#overlayInstructions');
+    var fileUpload = document.querySelector('#file-upload');
 
     // Put variables in global scope to make them available to the browser console.
     var video = window.video = document.querySelector('video');
     var canvas = window.canvas = document.querySelector('canvas');
-    canvas.width = 640;
-    canvas.height = 360;
+    canvas.width = 460;
+    canvas.height = 259;
 
-    snapshotButton.onclick = function () {
-      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    var ctx = canvas.getContext('2d');
+
+    snapshotButton.onclick = () => {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       canvas.setAttribute('style', 'display: block');
+      alertImageSize();
+    }
+
+
+    fileUpload.onchange = (e) => {
+      var img = new Image;
+      img.src = URL.createObjectURL(e.target.files[0]);
+
+      img.onload = function () {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        canvas.setAttribute('style', 'display: block');
+        URL.revokeObjectURL(img.src);
+        alertImageSize();        
+      }
+    }
+
+    function alertImageSize() {
       alert('Image size: ' + stringToBytesFaster(canvas.toDataURL()).length / 1000000 + " MB");
-    };
-
-    var constraints = {
-      audio: false,
-      video: true
-    };
-
-    var cameras = [];
+    }
 
     function handleSuccess(stream) {
       window.stream = stream; // make stream available to browser console
@@ -141,42 +156,21 @@
       fileUploadMode();
     }
 
-    function gotDevices(deviceInfos) {
-      for (var i = 0; i < deviceInfos.length; i++) {
-        var deviceInfo = deviceInfos[i];
+    if (navigator && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
-        if (deviceInfo.kind === 'videoinput') {
-          cameras.push(deviceInfo);
+      var constraints = {
+        audio: false,
+        video: {
+          facingMode: "environment",
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
         }
-      }
+      };
 
-      var cameraId = null;
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(handleSuccess)
+        .catch(handleError);
 
-      if (cameras.length > 0) {
-        cameraId = cameras[0].deviceId;
-      } else if (cameras.length > 1) {
-        cameraId = cameras[1].deviceId;
-      }
-
-      // constraints.video = { 
-      //   deviceId: cameraId ? { exact: cameraId } : undefined
-      // };
-
-      constraints.video = {
-        facingMode: "environment",
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
-      }
-
-      return navigator.mediaDevices.getUserMedia(constraints);
-    }
-
-    if(navigator && navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-
-      navigator.mediaDevices.enumerateDevices()
-      .then(gotDevices)
-      .then(handleSuccess)
-      .catch(handleError);
     } else {
       fileUploadMode();
     }
